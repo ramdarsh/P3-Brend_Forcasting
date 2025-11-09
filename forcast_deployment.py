@@ -70,7 +70,11 @@ if HORIZON:
      
 	brentForecast = forecast(HORIZON)
 	brentForecast = brentForecast.reshape(-1)
-	st.write('HOVER OVER THE CHART TO SEE PRICES...',font="Helvetica 20", color="blue" )
+	st.markdown(
+    '<p style="font-family:Helvetica; color:blue; font-size:20px;">HOVER OVER THE CHART TO SEE PRICES...</p>',
+    unsafe_allow_html=True
+	)
+
 	data = pd.DataFrame({'x': np.arange(1, len(brentForecast) + 1), 'y': brentForecast})
 
 
@@ -80,4 +84,5 @@ if HORIZON:
               title=f'Brent Crude Price Forecast for {HORIZON} days')
 
 # Display the Plotly Express figure using Streamlit
+
 	st.plotly_chart(fig)
