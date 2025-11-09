@@ -15,7 +15,7 @@ import gdown
 background_image = """
 <style>
 [data-testid="stAppViewContainer"] > .main {
-    background-image: url("https://sweetcrudereports.com/wp-content/uploads/2024/08/Brent-crude-oil-768x512.jpeg");
+    background-image: url("https://www.oilandgasmiddleeast.com/cloud/2025/06/24/p9AfpNk9-shutterstock_1722600523-1200x729.jpg");
     background-size: 100vw 100vh;  # This sets the size to cover 100% of the viewport width and height
     background-position: center;  
     background-repeat: no-repeat;
@@ -86,3 +86,4 @@ if HORIZON:
 # Display the Plotly Express figure using Streamlit
 
 	st.plotly_chart(fig)
+
