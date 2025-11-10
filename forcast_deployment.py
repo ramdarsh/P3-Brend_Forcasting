@@ -41,8 +41,8 @@ scalerMM = MinMaxScaler()
 arima_url = "https://drive.google.com/uc?id=11R20EzImKolCVqT2OAVjshurCN66ppEk"
 garch_url = "https://drive.google.com/uc?id=1GFIjKkfN_c_ddqEvAbhbIOJ_NLFaduGl"
 
-gdown.download(arima_url, 'modelARIMA.pkl', quiet=False)
-gdown.download(garch_url, 'resultGarch.pkl', quiet=False)
+gdown.download(arima_url, 'modelARIMA.pkl', quiet=False, use_cookies=False)
+gdown.download(garch_url, 'resultGarch.pkl', quiet=False, use_cookies=False)
 
 with open('modelARIMA.pkl', 'rb') as f:
     loadedARIMA = pickle.load(f)
@@ -87,3 +87,4 @@ if HORIZON > 0:
         title=f'Brent Crude Price Forecast for {HORIZON} Days'
     )
     st.plotly_chart(fig)
+
