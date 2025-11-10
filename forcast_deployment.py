@@ -12,7 +12,7 @@ import gdown
 background_image = """
 <style>
 [data-testid="stAppViewContainer"] > .main {
-    background-image: url("https://github.com/ramdarsh/P3-Brend_Forcasting/blob/main/p9AfpNk9-shutterstock_1722600523-1200x729.jpg");
+    background-image: url("https://raw.githubusercontent.com/ramdarsh/P3-Brend_Forcasting/main/p9AfpNk9-shutterstock_1722600523-1200x729.jpg");
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -73,5 +73,6 @@ if HORIZON > 0:
         title=f'Brent Crude Price Forecast for {HORIZON} Days'
     )
     st.plotly_chart(fig)
+
 
 
