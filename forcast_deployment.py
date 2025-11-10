@@ -6,7 +6,7 @@ import pickle
 import arch
 from sklearn.preprocessing import MinMaxScaler
 import plotly.express as px
-import gdown
+import requests
 
 # --- Background ---
 background_image = """
@@ -38,16 +38,46 @@ st.markdown(background_image, unsafe_allow_html=True)
 # --- Load Models ---
 scalerMM = MinMaxScaler()
 
-arima_url = "https://drive.google.com/uc?id=11R20EzImKolCVqT2OAVjshurCN66ppEk"
-garch_url = "https://drive.google.com/uc?id=1GFIjKkfN_c_ddqEvAbhbIOJ_NLFaduGl"
+# --- Function to download files directly from Google Drive ---
+def download_from_gdrive(file_id, destination):
+    """
+    Downloads a publicly shared Google Drive file using its file ID.
+    Make sure the file's sharing settings are 'Anyone with the link'.
+    """
+    URL = f"https://drive.google.com/uc?export=download&id={file_id}"
+    session = requests.Session()
+    response = session.get(URL, stream=True)
 
-gdown.download(arima_url, 'modelARIMA.pkl', quiet=False, use_cookies=False)
-gdown.download(garch_url, 'resultGarch.pkl', quiet=False, use_cookies=False)
+    if "Google Drive - Quota exceeded" in response.text:
+        st.error("Google Drive download quota exceeded. Try again later.")
+        return False
 
-with open('modelARIMA.pkl', 'rb') as f:
+    if response.status_code == 200:
+        with open(destination, "wb") as f:
+            for chunk in response.iter_content(32768):
+                if chunk:
+                    f.write(chunk)
+        st.success(f"✅ Downloaded {destination}")
+        return True
+    else:
+        st.error(f"❌ Failed to download file. HTTP {response.status_code}")
+        return False
+
+
+# --- Replace with your Google Drive FILE IDs ---
+# Make sure both files are shared as 'Anyone with link > Viewer'
+arima_id = "11R20EzImKolCVqT2OAVjshurCN66ppEk"   # example placeholder
+garch_id = "1GFIjKkfN_c_ddqEvAbhbIOJ_NLFaduGl"
+
+# --- Download your models ---
+download_from_gdrive(arima_id, "modelARIMA.pkl")
+download_from_gdrive(garch_id, "resultGarch.pkl")
+
+# --- Load models as usual ---
+with open("modelARIMA.pkl", "rb") as f:
     loadedARIMA = pickle.load(f)
 
-with open('resultGarch.pkl', 'rb') as f:
+with open("resultGarch.pkl", "rb") as f:
     loadedGARCH = pickle.load(f)
 
 # --- Forecast Function ---
@@ -87,4 +117,5 @@ if HORIZON > 0:
         title=f'Brent Crude Price Forecast for {HORIZON} Days'
     )
     st.plotly_chart(fig)
+
 
