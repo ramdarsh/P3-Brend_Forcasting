@@ -2,7 +2,7 @@ streamlit
 pandas
 numpy
 statsmodels
-arch
 scikit-learn
+arch
 plotly
-gdown
+requests
