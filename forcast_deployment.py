@@ -8,6 +8,7 @@ from sklearn.preprocessing import MinMaxScaler
 import plotly.express as px
 import gdown
 
+# --- Background ---
 background_image = """
 <style>
 .stApp {
@@ -17,7 +18,6 @@ background_image = """
     background-repeat: no-repeat;
 }
 
-/* Remove default dark overlay */
 [data-testid="stAppViewContainer"] {
     background-color: transparent! important;
 }
@@ -28,6 +28,11 @@ background_image = """
 
 [data-testid="stToolbar"] {
     right: 2rem;
+}
+
+/* Main text and title colors */
+h1, h2, h3, h4, h5, h6, p, div {
+    color: white! important;
 }
 </style>
 """
@@ -60,9 +65,11 @@ def forecast(HORIZON):
     return brentForecast
 
 # --- Streamlit UI ---
-st.text("Created by: RMS \nPowered by: GARCH + ARIMA")
-st.title("BrentPredict")
-st.text("Caution: This is not financial advice!")
+st.markdown('<p style="color:#FFD700; font-size:18px;">Created by: RMS</p>', unsafe_allow_html=True)
+st.markdown('<p style="color:#00FFFF; font-size:18px;">Powered by: GARCH + ARIMA</p>', unsafe_allow_html=True)
+
+st.markdown('<h1 style="color:white; font-size:42px; font-weight:bold;">BrentPredict</h1>', unsafe_allow_html=True)
+st.markdown('<p style="color:#FFB6C1; font-size:18px;">⚠️ Caution: This is not financial advice!</p>', unsafe_allow_html=True)
 
 user_input = st.number_input("Enter HORIZON (Forecasting periods)", 0)
 HORIZON = int(user_input)
@@ -70,7 +77,7 @@ HORIZON = int(user_input)
 if HORIZON > 0:
     brentForecast = forecast(HORIZON)
     st.markdown(
-        '<p style="font-family:Helvetica; color:#FFD700; font-size:20px;">HOVER OVER THE CHART TO SEE PRICES.</p>',
+        '<p style="font-family:Helvetica; color:#FFD700; font-size:20px; font-weight:bold; text-shadow:1px 1px 2px black;">HOVER OVER THE CHART TO SEE PRICES...</p>',
         unsafe_allow_html=True
     )
 
@@ -84,9 +91,11 @@ if HORIZON > 0:
         markers=True, line_shape='linear', width=800, height=400,
         title=f'Brent Crude Price Forecast for {HORIZON} Days'
     )
+    fig.update_layout(
+        title_font_color='gold',
+        font_color='white',
+        plot_bgcolor='rgba(0,0,0,0.6)',
+        paper_bgcolor='rgba(0,0,0,0)',
+        title_font_size=22
+    )
     st.plotly_chart(fig)
-
-
-
-
-
