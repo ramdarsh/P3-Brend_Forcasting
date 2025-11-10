@@ -20,7 +20,7 @@ background_image = """
 
 /* Remove default dark overlay */
 [data-testid="stAppViewContainer"] {
-    background-color: transparent !important;
+    background-color: transparent! important;
     }
 
 [data-testid="stHeader"] {
@@ -37,48 +37,22 @@ st.markdown(background_image, unsafe_allow_html=True)
 
 # --- Load Models ---
 scalerMM = MinMaxScaler()
-
-# --- Function to download files directly from Google Drive ---
-def download_from_gdrive(file_id, destination):
-    """
-    Downloads a publicly shared Google Drive file using its file ID.
-    Make sure the file's sharing settings are 'Anyone with the link'.
-    """
-    URL = f"https://drive.google.com/uc?export=download&id={file_id}"
-    session = requests.Session()
-    response = session.get(URL, stream=True)
-
-    if "Google Drive - Quota exceeded" in response.text:
-        st.error("Google Drive download quota exceeded. Try again later.")
-        return False
-
+def download_from_url(url, dest_path):
+    response = requests.get(url, stream=True)
     if response.status_code == 200:
-        with open(destination, "wb") as f:
-            for chunk in response.iter_content(32768):
+        with open(dest_path, "wb") as f:
+            for chunk in response.iter_content(chunk_size=8192):
                 if chunk:
                     f.write(chunk)
-        st.success(f"✅ Downloaded {destination}")
-        return True
+        st.success(f"✅ Downloaded {dest_path}")
     else:
-        st.error(f"❌ Failed to download file. HTTP {response.status_code}")
-        return False
+        st.error(f"❌ Failed to download {dest_path}. HTTP {response.status_code}")
 
+arima_url = "https://huggingface.co/Ramdarsh/brentpredict/resolve/main/modelARIMA.pkl"
+garch_url = "https://huggingface.co/Ramdarsh/brentpredict/resolve/main/resultGarch.pkl"
 
-# --- Replace with your Google Drive FILE IDs ---
-# Make sure both files are shared as 'Anyone with link > Viewer'
-arima_id = "11R20EzImKolCVqT2OAVjshurCN66ppEk"   # example placeholder
-garch_id = "1GFIjKkfN_c_ddqEvAbhbIOJ_NLFaduGl"
-
-# --- Download your models ---
-download_from_gdrive(arima_id, "modelARIMA.pkl")
-download_from_gdrive(garch_id, "resultGarch.pkl")
-
-# --- Load models as usual ---
-with open("modelARIMA.pkl", "rb") as f:
-    loadedARIMA = pickle.load(f)
-
-with open("resultGarch.pkl", "rb") as f:
-    loadedGARCH = pickle.load(f)
+download_from_url(arima_url, "modelARIMA.pkl")
+download_from_url(garch_url, "resultGarch.pkl")
 
 # --- Forecast Function ---
 def forecast(HORIZON):
@@ -117,5 +91,6 @@ if HORIZON > 0:
         title=f'Brent Crude Price Forecast for {HORIZON} Days'
     )
     st.plotly_chart(fig)
+
 
 
