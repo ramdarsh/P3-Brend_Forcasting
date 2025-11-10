@@ -70,7 +70,7 @@ HORIZON = int(user_input)
 if HORIZON > 0:
     brentForecast = forecast(HORIZON)
     st.markdown(
-        '<p style="font-family:Helvetica; color:blue; font-size:20px;">HOVER OVER THE CHART TO SEE PRICES...</p>',
+        '<p style="font-family:Helvetica; color:#FFD700; font-size:20px;">HOVER OVER THE CHART TO SEE PRICES.</p>',
         unsafe_allow_html=True
     )
 
@@ -85,6 +85,7 @@ if HORIZON > 0:
         title=f'Brent Crude Price Forecast for {HORIZON} Days'
     )
     st.plotly_chart(fig)
+
 
 
 
